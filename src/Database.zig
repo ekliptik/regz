@@ -964,13 +964,14 @@ pub fn toZig(db: *Database, out_writer: anytype) !void {
     // write zero to fifo so that it's null terminated
     try writer.writeByte(0);
     const text = fifo.readableSlice(0);
-    var ast = try std.zig.parse(db.gpa, @ptrCast([:0]const u8, text[0 .. text.len - 1]));
-    defer ast.deinit(db.gpa);
+    // var ast = try std.zig.parse(db.gpa, @ptrCast([:0]const u8, text[0 .. text.len - 1]));
+    // defer ast.deinit(db.gpa);
 
-    const formatted_text = try ast.render(db.gpa);
-    defer db.gpa.free(formatted_text);
+    // const formatted_text = try ast.render(db.gpa);
+    // defer db.gpa.free(formatted_text);
 
-    try out_writer.writeAll(formatted_text);
+    // try out_writer.writeAll(formatted_text);
+    try out_writer.writeAll(text);
 }
 
 fn genZigCluster(

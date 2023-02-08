@@ -89,8 +89,10 @@ pub fn addNvicCluster(db: *Database, scs: Database.PeripheralIndex) !void {
                 .addr_offset = addr_offset,
             });
 
-            if (fields.items.len > 0)
-                try register_fields.append(fields.toOwnedSlice(db.arena.allocator()));
+            if (fields.items.len > 0) {
+                const fields_owned = try fields.toOwnedSlice(db.arena.allocator());
+                try register_fields.append(fields_owned);
+            }
         }
     };
 
@@ -149,8 +151,8 @@ fn addInterruptPriorityRegisters(
                     .description = "Interrupt Priority Register",
                     .addr_offset = addr_offset,
                 });
-
-                try register_fields.append(fields.toOwnedSlice(db.arena.allocator()));
+                const fields_owned = try fields.toOwnedSlice(db.arena.allocator());
+                try register_fields.append(fields_owned);
             }
 
             try db.system_reg_addrs.put(db.gpa, base_addr + addr_offset, {});
